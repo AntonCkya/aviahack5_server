@@ -194,7 +194,8 @@ async def get_query(id: int):
 		'begin' : res[5],
 		'end' : res[6],
 		'start_date' : res[7],
-		'start_time' : res[8]
+		'start_time' : res[8],
+		'passengers_count' : res[9]
 	}
 
 
@@ -225,7 +226,8 @@ async def get_all_queries_on_bus(bus_id: int):
 			'begin' : res[5],
 			'end' : res[6],
 			'start_date' : res[7],
-			'start_time' : res[8]
+			'start_time' : res[8],
+			'passengers_count' : res[9]
 			}
 			)
 	return {"list": l}
@@ -272,7 +274,8 @@ async def get_queries_in_time(begin_time: str, end_time: str, day: str):
 			'begin' : res[5],
 			'end' : res[6],
 			'start_date' : res[7],
-			'start_time' : res[8]
+			'start_time' : res[8],
+			'passengers_count' : res[9]
 			}
 			)
 	return {"list": l}
@@ -299,7 +302,14 @@ async def get_all_queries():
 			'begin' : res[5],
 			'end' : res[6],
 			'start_date' : res[7],
-			'start_time' : res[8]
+  			'start_time' : res[8],
+ 			'passengers_count' : res[9]
 			}
 			)
 	return {"list": l}
+
+
+@app.put('/put_passengers_count/')
+async def put_passengers_count (id: int, passengers_count: str):
+	que.put_passengers_count(id, passengers_count)
+	return {"message": "success"}

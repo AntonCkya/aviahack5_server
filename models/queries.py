@@ -12,6 +12,7 @@ class Query(BaseModel):
 	end : int
 	start_date : date
 	start_time : str
+	passengers_count : int
 
 
 class Queries:
@@ -33,7 +34,8 @@ class Queries:
 					begin INT NOT NULL,
 					end INT NOT NULL,
 					start_date DATE NOT NULL,
-					start_time str NOT NULL,
+					start_time TEXT NOT NULL,
+					passengers_count INT NOT NULL,
 					FOREIGN KEY (dispatcher_id) REFERENCES dispatchers (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 					FOREIGN KEY (flight_id) REFERENCES flights (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 					FOREIGN KEY (bus_id) REFERENCES buses (id) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -44,8 +46,8 @@ class Queries:
 
 	def post_query (self, q: Query):
 		self.cur.execute("""
-					INSERT INTO queries (dispatcher_id, flight_id, bus_id, status, begin, end, start_date, start_time)
-   					VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+					INSERT INTO queries (dispatcher_id, flight_id, bus_id, status, begin, end, start_date, start_time, passengers_count)
+   					VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
    					""", [
    						q.dispatcher_id,
 						q.flight_id,
@@ -54,7 +56,8 @@ class Queries:
 						q.begin,
 						q.end,
 						q.start_date,
-						q.start_time
+						q.start_time,
+						q.passengers_count
 					])
 		self.conn.commit()
 
@@ -165,3 +168,13 @@ class Queries:
 					""")
 		res = self.cur.fetchall()
 		return res
+
+
+	def put_passengers_count (self, id: int, passengers_count: int):
+		self.cur.execute("""
+					UPDATE queries
+					SET
+					passengers_count = ?
+					WHERE id = ?;
+					""", [passengers_count, id])
+		self.conn.commit()
