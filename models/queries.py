@@ -156,3 +156,12 @@ class Queries:
 					WHERE id = ?;
 					""", [status, id])
 		self.conn.commit()
+
+
+	def get_all_queries (self):
+		self.cur.execute("""
+					SELECT * 
+					FROM queries;
+					""")
+		res = self.cur.fetchall()
+		return res
