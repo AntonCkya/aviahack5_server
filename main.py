@@ -1,16 +1,20 @@
 from fastapi import FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.middleware.cors import CORSMiddleware
+from datetime import date, time
+
 
 from models.buses import Bus, Buses
 from models.dispatchers import Dispatcher, Dispatchers
 from models.flights import Flight, Flights
+from models.queries import Query, Queries
 
 
 app = FastAPI()
 buses = Buses()
 disp = Dispatchers()
 flights = Flights()
+que = Queries()
 
 
 origins = [
@@ -76,6 +80,13 @@ async def get_all_buses():
 			)
 	return {"list": l}
 
+
+@app.get('/get_id_by_token/')
+async def get_id_by_token(token: str):
+	res = buses.get_id_by_token(token)
+	return {
+		'id': res[0]
+	}
 
 # Dispatcher
 
@@ -166,4 +177,81 @@ async def put_parking_place(id: int, parking_place: int):
 @app.put('/put_gate_number/')
 async def put_gate_number(id: int, gate_number: str):
 	flights.put_gate_number(id, gate_number)
+	return {"message": "success"}
+
+
+# Queries
+
+@app.get('/get_query/')
+async def get_query(id: int):
+	res = que.get_query(id)
+	return {
+		'id' : res[0],
+		'dispatcher_id' : res[1],
+		'flight_id' : res[2],
+		'bus_id' : res[3],
+		'status' : res[4],
+		'begin' : res[5],
+		'end' : res[6],
+		'start_date' : res[7],
+		'start_time' : res[8]
+	}
+
+
+@app.post('/post_query/')
+async def post_query(q: Query):
+	que.post_query(q)
+	return {"message": "success"}
+
+
+@app.delete('/delete_query/')
+async def delete_query(id: int):
+	que.delete_query(id)
+	return {"message": "success"}
+
+
+@app.get('/get_all_queries_on_bus/')
+async def get_all_queries_on_bus(bus_id: int):
+	many = que.get_all_queries_on_bus(bus_id)
+	l = []
+	for res in many:
+		l.append(
+			{
+			'id' : res[0],
+			'dispatcher_id' : res[1],
+			'flight_id' : res[2],
+			'bus_id' : res[3],
+			'status' : res[4],
+			'begin' : res[5],
+			'end' : res[6],
+			'start_date' : res[7],
+			'start_time' : res[8]
+			}
+			)
+	return {"list": l}
+
+
+@app.put('/put_start_time/')
+async def put_start_time (id: int, start_time: str):
+	que.put_start_time(id, start_time)
+	return {"message": "success"}
+
+
+@app.put('/put_start_date/')
+async def put_start_date (id: int, start_date: date):
+	que.put_start_date(id, start_date)
+	return {"message": "success"}
+
+
+
+@app.put('/put_begin/')
+async def put_begin (id: int, begin: int):
+	que.put_begin(id, begin)
+	return {"message": "success"}
+
+
+
+@app.put('/put_end/')
+async def put_end (id: int, end: int):
+	que.put_end(id, end)
 	return {"message": "success"}

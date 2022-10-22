@@ -1,6 +1,7 @@
 import sqlite3
 from pydantic import BaseModel
 
+
 class Bus(BaseModel):
 	capacity : int
 	token : str
@@ -61,4 +62,14 @@ class Buses:
 					FROM buses;
 					""")
 		res = self.cur.fetchall()
+		return res
+
+
+	def get_id_by_token (self, token: str):
+		self.cur.execute("""
+					SELECT id 
+					FROM buses
+					WHERE token LIKE ?;
+					""", (token,))
+		res = self.cur.fetchone()
 		return res
