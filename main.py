@@ -143,7 +143,7 @@ async def get_flight_number(id: int):
 	}
 
 
-@app.get('/get_id_by_flight_numbe/')
+@app.get('/get_id_by_flight_number/')
 async def get_id_by_flight_number(fln: int):
 	res = flights.get_id_by_flight_number(fln)
 	return {
@@ -154,16 +154,16 @@ async def get_id_by_flight_number(fln: int):
 @app.put('/put_date_time/')
 async def put_date_time(id: int, date: str, time: str):
 	flights.put_date_time(id, date, time)
-	get_flight(id)
+	return {"message": "success"}
 
 
 @app.put('/put_parking_place/')
 async def put_parking_place(id: int, parking_place: int):
 	flights.put_parking_place(id, parking_place)
-	get_flight(id)
+	return {"message": "success"}
 
 
 @app.put('/put_gate_number/')
-async def put_gate_number(id: int, gate_number: int):
+async def put_gate_number(id: int, gate_number: str):
 	flights.put_gate_number(id, gate_number)
-	get_flight(id)
+	return {"message": "success"}

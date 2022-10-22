@@ -9,12 +9,12 @@ class Flight (BaseModel):
 	terminal: str 
 	ak_code: str 
 	flight_number: int 
-	time: time 
+	time: str
 	ap_code: str 
 	aeroport: str
 	BC_type: str
 	parking_place: int
-	gate_number: int
+	gate_number: str
 	passengers_count: int
 
 
@@ -36,12 +36,12 @@ class Flights:
 					terminal TEXT NOT NULL,
 					ak_code TEXT NOT NULL,
 					flight_number INT NOT NULL,
-					time TIME NOT NULL,
+					time TEXT NOT NULL,
 					ap_code TEXT NOT NULL,
 					aeroport TEXT NOT NULL,
 					BC_type TEXT NOT NULL,
 					parking_place INT NOT NULL,
-					gate_number INT NOT NULL,
+					gate_number TEXT(5) NOT NULL,
 					passengers_count INT NOT NULL
 					);
 					""")
@@ -81,7 +81,7 @@ class Flights:
 	def get_flight (self, id: int):
 		self.cur.execute("""
 					SELECT * 
-					FROM flight
+					FROM flights
 					WHERE id = ?;
 					""", (id,))
 		res = self.cur.fetchone()
@@ -91,7 +91,7 @@ class Flights:
 	def get_flight_number (self, id: int):
 		self.cur.execute("""
 					SELECT flight_number 
-					FROM flight
+					FROM flights
 					WHERE id = ?;
 					""", (id,))
 		res = self.cur.fetchone()
@@ -101,7 +101,7 @@ class Flights:
 	def get_id_by_flight_number (self, fln: int):
 		self.cur.execute("""
 					SELECT id 
-					FROM flight
+					FROM flights
 					WHERE flight_number = ?;
 					""", (fln,))
 		res = self.cur.fetchone()
@@ -110,7 +110,7 @@ class Flights:
 
 	def put_date_time (self, id: int, date:str, time: str):
 		self.cur.execute("""
-					UPDATE flight
+					UPDATE flights
 					SET
 					date = ?,
 					time = ?
@@ -121,7 +121,7 @@ class Flights:
 
 	def put_parking_place (self, id: int, parking_place: int):
 		self.cur.execute("""
-					UPDATE flight
+					UPDATE flights
 					SET
 					parking_place = ?
 					WHERE id = ?;
@@ -129,9 +129,9 @@ class Flights:
 		self.conn.commit()
 
 
-	def put_gate_number (self, id: int, gate_number: int):
+	def put_gate_number (self, id: int, gate_number: str):
 		self.cur.execute("""
-					UPDATE flight
+					UPDATE flights
 					SET
 					gate_number = ?
 					WHERE id = ?;
