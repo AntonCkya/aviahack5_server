@@ -4,11 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from models.buses import Bus, Buses
 from models.dispatchers import Dispatcher, Dispatchers
+from models.flights import Flight, Flights
 
 
 app = FastAPI()
 buses = Buses()
 disp = Dispatchers()
+flights = Flights()
 
 
 origins = [
@@ -97,3 +99,71 @@ async def get_dispatcher(id: int):
 		'token': res[1],
 		'name': res[2]
 	}
+
+
+# Flights
+
+@app.post('/post_flight/')
+async def post_flight(flight: Flight):
+	flights.post_flight(flight)
+	return {"message": "success"}
+
+
+@app.delete('/delete_flight/')
+async def delete_flight(id: int):
+	flights.delete_flight(id)
+	return {"message": "success"}
+
+
+@app.get('/get_flight/')
+async def get_flight(id: int):
+	res = flights.get_flight(id)
+	return {
+		'id': res[0],
+		'date': res[1],
+		'AD': res[2],
+		'terminal': res[3],
+		'ak_code': res[4],
+		'flight_number': res[5],
+		'time': res[6],
+		'ap_code': res[7],
+		'aeroport': res[8],
+		'BC_type': res[9],
+		'parking_place': res[10],
+		'gate_number': res[11],
+		'passengers_count': res[12]
+	}
+
+
+@app.get('/get_flight_number/')
+async def get_flight_number(id: int):
+	res = flights.get_flight_number(id)
+	return {
+		'flight_number': res[0]
+	}
+
+
+@app.get('/get_id_by_flight_numbe/')
+async def get_id_by_flight_number(fln: int):
+	res = flights.get_id_by_flight_number(fln)
+	return {
+		'id': res[0]
+	}
+
+
+@app.put('/put_date_time/')
+async def put_date_time(id: int, date: str, time: str):
+	flights.put_date_time(id, date, time)
+	get_flight(id)
+
+
+@app.put('/put_parking_place/')
+async def put_parking_place(id: int, parking_place: int):
+	flights.put_parking_place(id, parking_place)
+	get_flight(id)
+
+
+@app.put('/put_gate_number/')
+async def put_gate_number(id: int, gate_number: int):
+	flights.put_gate_number(id, gate_number)
+	get_flight(id)
