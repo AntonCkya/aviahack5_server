@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+from fastapi.openapi.utils import get_openapi
+from fastapi.middleware.cors import CORSMiddleware
+
 from models.buses import Bus, Buses
 from models.dispatchers import Dispatcher, Dispatchers
 
@@ -6,6 +9,24 @@ from models.dispatchers import Dispatcher, Dispatchers
 app = FastAPI()
 buses = Buses()
 disp = Dispatchers()
+
+
+origins = [
+    "http://localhost"
+    "https://localhost",
+    "http://localhost:8000",
+    "https://localhost:8000",
+    "http://localhost:3000",
+    "https://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get('/')
