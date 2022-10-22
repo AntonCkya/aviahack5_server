@@ -1,2 +1,2 @@
 # aviahack5_server
-aviahack5 server
+load: uvicorn main:app reload
