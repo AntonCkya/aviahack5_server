@@ -33,7 +33,7 @@ class Queries:
 					begin INT NOT NULL,
 					end INT NOT NULL,
 					start_date DATE NOT NULL,
-					start_time TEXT NOT NULL,
+					start_time str NOT NULL,
 					FOREIGN KEY (dispatcher_id) REFERENCES dispatchers (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 					FOREIGN KEY (flight_id) REFERENCES flights (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 					FOREIGN KEY (bus_id) REFERENCES buses (id) ON DELETE RESTRICT ON UPDATE CASCADE
@@ -138,3 +138,21 @@ class Queries:
 		return res
 
 
+	def get_queries_in_time (self, begin_time: str, end_time: str, day: str):
+		self.cur.execute("""
+					SELECT * 
+					FROM queries
+					WHERE time(?) < start_time AND time(?) > start_time AND start_date = date(?);
+					""", [begin_time, end_time, day])
+		res = self.cur.fetchall()
+		return res
+
+
+	def put_status (self, id: int, status: str):
+		self.cur.execute("""
+					UPDATE queries
+					SET
+					status = ?
+					WHERE id = ?;
+					""", [status, id])
+		self.conn.commit()

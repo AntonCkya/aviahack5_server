@@ -255,3 +255,30 @@ async def put_begin (id: int, begin: int):
 async def put_end (id: int, end: int):
 	que.put_end(id, end)
 	return {"message": "success"}
+
+
+@app.get('/get_queries_in_time/')
+async def get_queries_in_time(begin_time: str, end_time: str, day: str):
+	many = que.get_queries_in_time(begin_time, end_time, day)
+	l = []
+	for res in many:
+		l.append(
+			{
+			'id' : res[0],
+			'dispatcher_id' : res[1],
+			'flight_id' : res[2],
+			'bus_id' : res[3],
+			'status' : res[4],
+			'begin' : res[5],
+			'end' : res[6],
+			'start_date' : res[7],
+			'start_time' : res[8]
+			}
+			)
+	return {"list": l}
+
+
+@app.put('/put_status/')
+async def put_status (id: int, status: str):
+	que.put_status(id, status)
+	return {"message": "success"}
