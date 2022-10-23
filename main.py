@@ -61,7 +61,8 @@ async def get_bus(id: int):
 		'id': res[0],
 		'capacity': res[1],
 		'token': res[2],
-		'position': res[3]
+		'position': res[3],
+		'name': res[4]
 	}
 
 
@@ -75,7 +76,8 @@ async def get_all_buses():
 			'id': res[0],
 			'capacity': res[1],
 			'token': res[2],
-			'position': res[3]
+			'position': res[3],
+			'name': res[4]
 			}
 			)
 	return {"list": l}
@@ -336,6 +338,12 @@ async def put_end_date (id: int, end_date: date):
 @app.put('/put_bus/')
 async def put_bus (id: int, bus_id: int):
 	que.put_bus(id, bus_id)
+	return {"message": "success"}
+
+
+@app.put('/put_name_to_bus/')
+async def put_name_to_bus (id: int, name: str):
+	buses.put_name_to_bus(id, name)
 	return {"message": "success"}
 
 

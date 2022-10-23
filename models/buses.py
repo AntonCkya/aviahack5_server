@@ -6,11 +6,12 @@ class Bus(BaseModel):
 	capacity : int
 	token : str
 	position : str
+	name: str
 
 
 class Buses:
 	"""
-	id | capacity | token | position
+	id | capacity | token | position | name
 	"""
 	conn = sqlite3.connect('SVO.db')
 	cur = conn.cursor()
@@ -22,7 +23,8 @@ class Buses:
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					capacity INT NOT NULL,
 					token TEXT,
-					position TEXT NOT NULL
+					position TEXT NOT NULL,
+					name TEXT
 					);
 					""")
 		self.conn.commit()
@@ -30,9 +32,9 @@ class Buses:
 
 	def post_bus (self, bus: Bus):
 		self.cur.execute("""
-					INSERT INTO buses (capacity, token, position)
-   					VALUES(?, ?, ?);
-   					""", [bus.capacity, bus.token, bus.position])
+					INSERT INTO buses (capacity, token, position, name)
+   					VALUES(?, ?, ?, ?);
+   					""", [bus.capacity, bus.token, bus.position, bus.name])
 		self.conn.commit()
 
 
@@ -73,3 +75,13 @@ class Buses:
 					""", (token,))
 		res = self.cur.fetchone()
 		return res
+
+
+	def put_name_to_bus (self, id: int, name: str):
+		self.cur.execute("""
+					UPDATE buses
+					SET
+					name = ?
+					WHERE id = ?;
+					""", [name, id])
+		self.conn.commit()
