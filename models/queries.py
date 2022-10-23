@@ -12,12 +12,15 @@ class Query(BaseModel):
 	end : int
 	start_date : date
 	start_time : str
+	end_date : date
+	end_time : str
 	passengers_count : int
 
 
 class Queries:
 	"""
-	id | dispatcher_id | flight_id | bus_id | status | begin | end | start_date | start_time
+	id | dispatcher_id | flight_id | bus_id | status | begin | end | start_date | start_time |
+	| end_date | end_time | passengers_count
 	"""
 	conn = sqlite3.connect('SVO.db')
 	cur = conn.cursor()
@@ -35,6 +38,8 @@ class Queries:
 					end INT NOT NULL,
 					start_date DATE NOT NULL,
 					start_time TEXT NOT NULL,
+					end_date DATE NOT NULL,
+					end_time TEXT NOT NULL,
 					passengers_count INT NOT NULL,
 					FOREIGN KEY (dispatcher_id) REFERENCES dispatchers (id) ON DELETE RESTRICT ON UPDATE CASCADE,
 					FOREIGN KEY (flight_id) REFERENCES flights (id) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -46,8 +51,8 @@ class Queries:
 
 	def post_query (self, q: Query):
 		self.cur.execute("""
-					INSERT INTO queries (dispatcher_id, flight_id, bus_id, status, begin, end, start_date, start_time, passengers_count)
-   					VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);
+					INSERT INTO queries (dispatcher_id, flight_id, bus_id, status, begin, end, start_date, start_time, end_date, end_time, passengers_count)
+   					VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
    					""", [
    						q.dispatcher_id,
 						q.flight_id,
@@ -57,6 +62,8 @@ class Queries:
 						q.end,
 						q.start_date,
 						q.start_time,
+						q.end_date,
+						q.end_time,
 						q.passengers_count
 					])
 		self.conn.commit()
@@ -177,4 +184,24 @@ class Queries:
 					passengers_count = ?
 					WHERE id = ?;
 					""", [passengers_count, id])
+		self.conn.commit()
+
+
+	def put_end_time (self, id: int, end_time: str):
+		self.cur.execute("""
+					UPDATE queries
+					SET
+					end_time = ?
+					WHERE id = ?;
+					""", [end_time, id])
+		self.conn.commit()
+
+
+	def put_end_date (self, id: int, end_date: date):
+		self.cur.execute("""
+					UPDATE queries
+					SET
+					end_date = ?
+					WHERE id = ?;
+					""", [end_date, id])
 		self.conn.commit()

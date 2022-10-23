@@ -195,7 +195,9 @@ async def get_query(id: int):
 		'end' : res[6],
 		'start_date' : res[7],
 		'start_time' : res[8],
-		'passengers_count' : res[9]
+		'end_date' : res[9],
+		'end_time' : res[10],
+		'passengers_count' : res[11]
 	}
 
 
@@ -227,7 +229,9 @@ async def get_all_queries_on_bus(bus_id: int):
 			'end' : res[6],
 			'start_date' : res[7],
 			'start_time' : res[8],
-			'passengers_count' : res[9]
+			'end_date' : res[9],
+			'end_time' : res[10],
+			'passengers_count' : res[11]
 			}
 			)
 	return {"list": l}
@@ -275,7 +279,9 @@ async def get_queries_in_time(begin_time: str, end_time: str, day: str):
 			'end' : res[6],
 			'start_date' : res[7],
 			'start_time' : res[8],
-			'passengers_count' : res[9]
+			'end_date' : res[9],
+			'end_time' : res[10],
+			'passengers_count' : res[11]
 			}
 			)
 	return {"list": l}
@@ -312,4 +318,22 @@ async def get_all_queries():
 @app.put('/put_passengers_count/')
 async def put_passengers_count (id: int, passengers_count: str):
 	que.put_passengers_count(id, passengers_count)
+	return {"message": "success"}
+
+
+@app.put('/put_end_time/')
+async def put_end_time (id: int, end_time: str):
+	que.put_end_time(id, end_time)
+	return {"message": "success"}
+
+
+@app.put('/put_end_date/')
+async def put_end_date (id: int, end_date: date):
+	que.put_end_date(id, end_date)
+	return {"message": "success"}
+
+
+@app.put('/put_bus/')
+async def put_bus (id: int, bus_id: int):
+	que.put_bus(id, bus_id)
 	return {"message": "success"}
