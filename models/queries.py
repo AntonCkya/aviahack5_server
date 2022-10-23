@@ -4,7 +4,7 @@ from datetime import date, time
 
 
 class Query(BaseModel):
-	dispatcher_id : int
+	dispatcher_id : int = None
 	flight_id : int
 	bus_id : int
 	status : str
@@ -30,7 +30,7 @@ class Queries:
 					CREATE TABLE IF NOT EXISTS queries
 					(
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
-					dispatcher_id INT NOT NULL,
+					dispatcher_id INT,
 					flight_id INT NOT NULL,
 					bus_id INT NOT NULL,
 					status TEXT(1) NOT NULL,
