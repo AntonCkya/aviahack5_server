@@ -337,3 +337,20 @@ async def put_end_date (id: int, end_date: date):
 async def put_bus (id: int, bus_id: int):
 	que.put_bus(id, bus_id)
 	return {"message": "success"}
+
+
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="SVO_bus_API",
+        version="1.0",
+        description="API for buses and bus dispatchers on Sheremetyevo international airport",
+        routes=app.routes,
+    )
+    openapi_schema["info"]["x-logo"] = {
+        "url": "https://www.ph4.ru/DL/LOGO/s/sheremetievo.gif"
+    }
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+app.openapi = custom_openapi
