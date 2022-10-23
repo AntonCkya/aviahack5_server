@@ -148,12 +148,12 @@ class Queries:
 		return res
 
 
-	def get_queries_in_time (self, begin_time: str, end_time: str, day: str):
+	def get_queries_in_time (self, begin_time: str, end_time: str, begin_date: date, end_date: date):
 		self.cur.execute("""
 					SELECT * 
 					FROM queries
-					WHERE time(?) < start_time AND time(?) > start_time AND start_date = date(?);
-					""", [begin_time, end_time, day])
+					WHERE time(?) < start_time AND time(?) > start_time AND ? < start_date AND ? > start_date;
+					""", [begin_time, end_time, begin_date, end_date])
 		res = self.cur.fetchall()
 		return res
 

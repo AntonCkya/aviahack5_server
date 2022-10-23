@@ -266,8 +266,8 @@ async def put_end (id: int, end: int):
 
 
 @app.get('/get_queries_in_time/')
-async def get_queries_in_time(begin_time: str, end_time: str, day: str):
-	many = que.get_queries_in_time(begin_time, end_time, day)
+async def get_queries_in_time(begin_time: str, end_time: str, begin_date: date, end_date: date):
+	many = que.get_queries_in_time(begin_time, end_time, begin_date, end_date)
 	l = []
 	for res in many:
 		l.append(
